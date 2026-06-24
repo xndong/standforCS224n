@@ -3,21 +3,28 @@
 Created on Mon Nov 25 19:54:35 2019
 
 @author: DongXiaoning
+
+# rnn forward for one entry data with n:n, 1:n, n:1, n:m ---> different paradigm
+# slightly modify them to adapt to your case when using the code.
+
 """
+
 
 import numpy as np
 
-def softmax(x):       # vector
-    return np.exp(x) / np.sum(np.exp(x), axis=0)
+# def softmax(x):       # vector
+#     return np.exp(x) / np.sum(np.exp(x), axis=0)
 
-def softmax1(x):
-    e_x = np.exp(x)  
-    return e_x / e_x.sum(axis=0)
+# def softmax(x):       # vector
+#     e_x = np.exp(x)  
+#     return e_x / e_x.sum(axis=0)
 
-def softmax2(x):
+
+# avoid underflow or overflow for exp(x)
+def softmax(x):
     e_x = np.exp(x - np.max(x))  
     return e_x / e_x.sum(axis=0)
-   
+  
 def sigmoid(x):       # scalar  
     return 1 / (1 + np.exp(-x))
 
@@ -94,7 +101,7 @@ def main():
     yt_row = 10 # 10-class 'classifier'
     parameters = init_parameter(R_D,R_d,yt_row)
 
-    rnn_forward_1n(xt,h_prev,parameters)    
+    rnn_forward_nn(xt,h_prev,parameters)    
     
     
 if __name__ == "__main__":
